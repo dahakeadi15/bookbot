@@ -24,12 +24,17 @@ def get_character_count(text):
         else:
             chars[lower_c] = 1
 
-    chars = {
-        key: value
-        for value, key in sorted([(chars[c], c) for c in chars], reverse=True)
-    }
-
     return chars
+
+
+def key_sort_char_count_dic(d):
+    return d["count"]
+
+
+def char_count_dict_to_sorted_list(num_chars_dict):
+    list_of_dicts = [{"char": c, "count": num_chars_dict[c]} for c in num_chars_dict]
+    list_of_dicts.sort(reverse=True, key=key_sort_char_count_dic)
+    return list_of_dicts
 
 
 def get_report(text):
@@ -45,9 +50,10 @@ def get_report(text):
 
     # get count of all characters and include the ones from the alphabet it in the report
     num_chars = get_character_count(text)
-    for c in num_chars:
-        if c.isalpha():
-            report += f"The '{c}' character was found {num_chars[c]} times\n"
+    char_count_sorted_list = char_count_dict_to_sorted_list(num_chars)
+    for d in char_count_sorted_list:
+        if d["char"].isalpha():
+            report += f"The '{d['char']}' character was found {d['count']} times\n"
 
     # end of report
     report += "--- End report ---"
